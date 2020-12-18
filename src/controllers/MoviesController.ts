@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import GetMovieData from '../services/GetMovieData';
+import GetMovie from '../services/GetMovie';
+import MoviesRepository from '../database/repositories/MoviesRepository';
 
 class MoviesController {
   public async index(req: Request, res: Response): Promise<Response> {
@@ -14,8 +15,8 @@ class MoviesController {
 
     // Make the API request
     try {
-      const getMovieData = new GetMovieData();
-      const movieData = await getMovieData.execute(numberId);
+      const getMovie = new GetMovie(new MoviesRepository());
+      const movieData = await getMovie.execute(numberId);
       return res.json(movieData);
     } catch (error) {
       return res.status(error.status || 400).json({ error });
