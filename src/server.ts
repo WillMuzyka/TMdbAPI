@@ -1,10 +1,11 @@
+import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
+import routes from './routes';
 
 const app = express();
 
 app.use(express.json());
-
-app.get('/', (req, res) => res.json({ message: 'Server online!' }));
+app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   console.error(err); //eslint-disable-line

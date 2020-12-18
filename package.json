@@ -4,13 +4,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
+    "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
     "lint": "",
     "start": "",
     "test": ""
   },
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
