@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import GetMovie from '../services/GetMovie';
+import GetMovieService from '../services/GetMovieService';
 import MoviesRepository from '../database/repositories/MoviesRepository';
 
 class MoviesController {
@@ -15,7 +15,7 @@ class MoviesController {
 
     // Make the API request
     try {
-      const getMovie = new GetMovie(new MoviesRepository());
+      const getMovie = new GetMovieService(new MoviesRepository());
       const movieData = await getMovie.execute(numberId);
       return res.json(movieData);
     } catch (error) {
