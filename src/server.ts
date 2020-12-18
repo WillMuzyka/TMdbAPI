@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import './database';
 import express, { Request, Response, NextFunction } from 'express';
 import routes from './routes';
 
