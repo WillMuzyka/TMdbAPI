@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+
+  tmdb:
+    container_name: tmdb
+    build: '.'
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    depends_on:
+      - tmdb-postgres
+    environment:
+      DB_HOST: tmdb-postgres
+    networks:
+      - app-connect
+    ports:
+      - '3333:3333'
+
+  tmdb-postgres:
+    container_name: tmdb-postgres
+    image: postgres:11
+    restart: unless-stopped
+    volumes:
+      - tmdb-postgres-data:/data
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - app-connect
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+
+volumes:
+  tmdb-postgres-data:
+
+networks:
+  app-connect:
+      driver: bridge
