@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
+import { container } from 'tsyringe';
 import GetMovieService from '../services/GetMovieService';
-import MoviesRepository from '../database/repositories/MoviesRepository';
 
 class MoviesController {
   public async index(req: Request, res: Response): Promise<Response> {
@@ -15,7 +15,7 @@ class MoviesController {
 
     // Make the API request
     try {
-      const getMovie = new GetMovieService(new MoviesRepository());
+      const getMovie = container.resolve(GetMovieService);
       const movieData = await getMovie.execute(numberId);
       return res.json(movieData);
     } catch (error) {

@@ -1,13 +1,15 @@
-import httpGet from '../utils/http';
-import MovieDTO from '../dtos/MovieDTO';
-import { MoviesRepositoryDTO } from '../database/repositories/MoviesRepository';
+import { inject, injectable } from 'tsyringe';
 
-interface TranslationsResponse {
+import httpGet from '../utils/http';
+import IMovieDTO from '../dtos/IMovieDTO';
+import IMoviesRepository from '../database/repositories/IMoviesRepository';
+
+interface ITranslationsResponse {
   translations: {
     english_name: string;
   }[]
 }
-interface MoviesResponse {
+interface IMoviesResponse {
   id: number;
   title: string;
   overview: string;
@@ -21,20 +23,22 @@ interface MoviesResponse {
   poster_path: string;
 }
 
+@injectable()
 class GetMovie {
   constructor(
-    private moviesRepository: MoviesRepositoryDTO,
+    @inject('MoviesRepository')
+    private moviesRepository: IMoviesRepository,
   ) {}
 
-  public async execute(id: number): Promise<MovieDTO> {
+  public async execute(id: number): Promise<IMovieDTO> {
     const duplicated = await this.moviesRepository.findById(id);
     if (duplicated) return duplicated;
 
     const url = `https://api.themoviedb.org/3/movie/${id}`;
     const key = process.env.THEMOVIEDB_API_KEY;
 
-    const movieResponse = await httpGet<MoviesResponse>(url, key);
-    const translationsResponse = await httpGet<TranslationsResponse>(`${url}/translations`, key);
+    const movieResponse = await httpGet<IMoviesResponse>(url, key);
+    const translationsResponse = await httpGet<ITranslationsResponse>(`${url}/translations`, key);
 
     const movieData = {
       ...this.format_movie_data(movieResponse, translationsResponse),
@@ -45,8 +49,8 @@ class GetMovie {
   }
 
   private format_movie_data(
-    movieResponse: MoviesResponse, translationsResponse: TranslationsResponse,
-  ): MovieDTO {
+    movieResponse: IMoviesResponse, translationsResponse: ITranslationsResponse,
+  ): IMovieDTO {
     const genresArray = movieResponse.genres.map((genre) => (genre.name));
     const translationsArray = translationsResponse.translations.map(
       (translation) => translation.english_name,

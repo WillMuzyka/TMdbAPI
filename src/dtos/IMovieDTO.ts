@@ -1,4 +1,4 @@
-export default interface MovieData {
+export default interface IMovieDTO {
   id: number;
   title: string;
   overview: string;

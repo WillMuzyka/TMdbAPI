@@ -1,25 +1,15 @@
 import { getRepository, Repository } from 'typeorm';
 import Movie from '../models/Movie';
-import MovieDTO from '../../dtos/MovieDTO';
+import IMoviesRepository from './IMoviesRepository';
 
-export interface MoviesRepositoryDTO {
-  save(movie: Movie): Promise<Movie>;
-  create(movie: MovieDTO): Promise<Movie>;
-  findById(id: number): Promise<Movie | undefined>;
-}
-
-export default class MoviesRepository implements MoviesRepositoryDTO {
+export default class MoviesRepository implements IMoviesRepository {
   private ormRepository: Repository<Movie>;
 
   constructor() {
     this.ormRepository = getRepository(Movie);
   }
 
-  public async save(movie: Movie): Promise<Movie> {
-    return this.ormRepository.save(movie);
-  }
-
-  public async create(movieData: MovieDTO): Promise<Movie> {
+  public async create(movieData: Movie): Promise<Movie> {
     const movie = this.ormRepository.create(movieData);
     await this.ormRepository.save(movie);
 

@@ -2,8 +2,6 @@ import {
   Entity,
   Column,
   PrimaryColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('movies')
@@ -34,12 +32,6 @@ class Movie {
 
   @Column('text', { array: true })
   translations: string[];
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
 
 export default Movie;
