@@ -14,7 +14,8 @@ Project TMdbAPI
 <p  align="center">
 <a  href="#joystick-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a  href="#hourglass_flowing_sand-installation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-<a  href="#joystick-docker">Docker</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+<a  href="#book-environment-variables">Environment Variables</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+<a  href="#whale2-docker">Docker</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a  href="#cop-remarks">Remarks</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 <a  href="#memo-license">License</a>
 </p>
@@ -46,7 +47,7 @@ The whole project was made based on Node.js and docker. If you want to use this 
 
 2. Run the command `yarn` or `npm install` to install all the required packages listed on the file *`package.json`*.
 
-3. Set the environmental variables that suits your setup. An example can be found at the root directory of this project.
+3. Set the environment variables that suits your setup. An example can be found at the root directory of this project and more information can be found on section "Variables".
 
 4. The backend consumes a Postgres Database, so you will need have them running. I used docker, but feel free to use any other service. The configurations for the databases can be found at `ormconfig.json`.
 
@@ -56,7 +57,19 @@ The whole project was made based on Node.js and docker. If you want to use this 
 
 7. Enjoy the application!
 
-## :joystick: Docker
+
+## :book: Environment Variables
+
+This project has a .env file that contains all the environment variables. They are required and should not be left with empty values. The list of all variables can be found bellow.
+
+* **THEMOVIEDB_API_KEY**: This key is generated at the [TMdb website](https://developers.themoviedb.org/3/gettingstarted/introduction). It's free for personal use, and can be acquired after sign up at TMdb. At their website there's a tutorial on how to setup everything up.
+* **DB_HOST**: The hostname for postgres database. If using docker, this variable will be automatically set for the postgres container name.
+* **DB_PORT**: The port for postgres database.
+* **DB_USERNAME**: The username for postgres database.
+* **DB_PASSWORD**: The password for postgres database.
+* **DB_NAME**: The name for postgres database.
+
+## :whale2: Docker
 
 This project can be setup all within a container using docker. For this, first be sure to have installed both docker and docker-compose on your machine.
 To start the application, run `docker-compose up -d`, it will build (if needed) and start the application in detached mode.
