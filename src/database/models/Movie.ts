@@ -12,7 +12,7 @@ class Movie {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   overview: string;
 
   @Column()
@@ -27,7 +27,7 @@ class Movie {
   @Column()
   popularity: number;
 
-  @Column()
+  @Column({ nullable: true })
   poster_path: string;
 
   @Column('text', { array: true })

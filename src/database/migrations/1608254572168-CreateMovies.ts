@@ -19,6 +19,7 @@ implements MigrationInterface {
           {
             name: 'overview',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'runtime',
@@ -39,6 +40,7 @@ implements MigrationInterface {
           {
             name: 'poster_path',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'translations',
