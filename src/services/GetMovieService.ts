@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import httpGet from '../utils/http';
 import IMovieDTO from '../dtos/IMovieDTO';
 import IMoviesRepository from '../database/repositories/IMoviesRepository';
+import AppError from '../errors/AppError';
 
 interface ITranslationsResponse {
   translations: {
@@ -31,21 +32,29 @@ class GetMovie {
   ) {}
 
   public async execute(id: number): Promise<IMovieDTO> {
-    const duplicated = await this.moviesRepository.findById(id);
-    if (duplicated) return duplicated;
+    try {
+      const duplicated = await this.moviesRepository.findById(id);
+      if (duplicated) return duplicated;
+    } catch (error) {
+      throw new AppError('Error when retrivieng data from database.', 500);
+    }
 
-    const url = `https://api.themoviedb.org/3/movie/${id}`;
-    const key = process.env.THEMOVIEDB_API_KEY;
+    try {
+      const url = `https://api.themoviedb.org/3/movie/${id}`;
+      const key = process.env.THEMOVIEDB_API_KEY;
 
-    const movieResponse = await httpGet<IMoviesResponse>(url, key);
-    const translationsResponse = await httpGet<ITranslationsResponse>(`${url}/translations`, key);
+      const movieResponse = await httpGet<IMoviesResponse>(url, key);
+      const translationsResponse = await httpGet<ITranslationsResponse>(`${url}/translations`, key);
 
-    const movieData = {
-      ...this.format_movie_data(movieResponse, translationsResponse),
-    };
+      const movieData = {
+        ...this.format_movie_data(movieResponse, translationsResponse),
+      };
 
-    this.moviesRepository.create(movieData);
-    return (movieData);
+      this.moviesRepository.create(movieData);
+      return (movieData);
+    } catch (error) {
+      throw new AppError('Error when retrivieng data from TMdb.', 503);
+    }
   }
 
   private format_movie_data(

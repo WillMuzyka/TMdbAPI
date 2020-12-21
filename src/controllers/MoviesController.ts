@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import GetMovieService from '../services/GetMovieService';
+import AppError from '../errors/AppError';
 
 class MoviesController {
   public async index(req: Request, res: Response): Promise<Response> {
@@ -10,7 +11,7 @@ class MoviesController {
 
     // Check if is valid id
     if (typeof numberId !== 'number') {
-      return res.status(400).json({ error: 'ID requested is not a number.' });
+      throw new AppError('ID requested is not a number.', 400);
     }
 
     // Make the API request
@@ -19,7 +20,10 @@ class MoviesController {
       const movieData = await getMovie.execute(numberId);
       return res.json(movieData);
     } catch (error) {
-      return res.status(error.status || 400).json({ error });
+      throw new AppError(
+        error.message || 'Error getting movie information',
+        error.status || 400,
+      );
     }
   }
 }

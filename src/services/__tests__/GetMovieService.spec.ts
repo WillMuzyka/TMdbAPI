@@ -85,4 +85,23 @@ describe('GetMovie', () => {
     const movie = await getMovie.execute(0);
     expect(movie).toMatchObject(ExpectedResponse);
   });
+
+  it('should return a error if database is unavailable', async () => {
+    jest
+      .spyOn(fakeMoviesRepository, 'findById')
+      .mockImplementation(() => {
+        throw new Error('Test error');
+      });
+
+    await expect(getMovie.execute(0)).rejects;
+  });
+
+  it('should return a error if TMdb is unavailable', async () => {
+    const mock = new AxiosMockAdapter(axios);
+    mock
+      .onGet(/.*\d$/)
+      .reply(400, { message: 'Test error' });
+
+    await expect(getMovie.execute(0)).rejects;
+  });
 });
